@@ -1,0 +1,275 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mysterious Shadow</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body{
+        overflow:hidden;
+        height:100vh;
+        background:black;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:relative;
+    }
+
+    /* Background Smoke */
+    .smoke{
+        position:absolute;
+        width:200%;
+        height:200%;
+        background:radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+        animation:smokeMove 12s linear infinite;
+        opacity:0.5;
+    }
+
+    @keyframes smokeMove{
+        0%{ transform:translate(-10%, -10%) rotate(0deg);}
+        100%{ transform:translate(10%, 10%) rotate(360deg);}
+    }
+
+    /* Fading Light */
+    .light{
+        position:absolute;
+        width:500px;
+        height:500px;
+        background:radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+        border-radius:50%;
+        animation:flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker{
+        0%{opacity:0.2;}
+        25%{opacity:0.5;}
+        50%{opacity:0.1;}
+        75%{opacity:0.4;}
+        100%{opacity:0.2;}
+    }
+
+    /* Shadow Dancer */
+    .mj-shadow{
+        position:absolute;
+        bottom:120px;
+        width:120px;
+        height:250px;
+        background:rgba(0,0,0,0.9);
+        border-radius:50px;
+        filter:blur(1px);
+        animation:dance 2s infinite ease-in-out;
+        box-shadow:0 0 30px rgba(255,255,255,0.1);
+    }
+
+    .mj-shadow::before{
+        content:'';
+        position:absolute;
+        width:80px;
+        height:80px;
+        background:rgba(0,0,0,0.95);
+        border-radius:50%;
+        top:-40px;
+        left:20px;
+    }
+
+    .mj-shadow::after{
+        content:'';
+        position:absolute;
+        width:160px;
+        height:20px;
+        background:rgba(0,0,0,0.95);
+        top:40px;
+        left:-20px;
+        transform:rotate(-20deg);
+        border-radius:20px;
+    }
+
+    @keyframes dance{
+        0%{
+            transform:rotate(-3deg) translateY(0px);
+        }
+        50%{
+            transform:rotate(3deg) translateY(-15px);
+        }
+        100%{
+            transform:rotate(-3deg) translateY(0px);
+        }
+    }
+
+    /* Anonymous Boy */
+    .boy{
+        position:absolute;
+        right:8%;
+        bottom:80px;
+        width:180px;
+        height:220px;
+    }
+
+    .hood{
+        position:absolute;
+        width:120px;
+        height:140px;
+        background:#111;
+        border-radius:60px 60px 40px 40px;
+        left:30px;
+        top:0;
+    }
+
+    .face{
+        position:absolute;
+        width:70px;
+        height:70px;
+        background:#000;
+        border-radius:50%;
+        left:55px;
+        top:40px;
+        box-shadow:0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .body{
+        position:absolute;
+        width:160px;
+        height:120px;
+        background:#0b0b0b;
+        border-radius:20px;
+        bottom:0;
+        left:10px;
+    }
+
+    /* Laptop */
+    .laptop{
+        position:absolute;
+        width:140px;
+        height:15px;
+        background:#222;
+        bottom:30px;
+        left:20px;
+        transform:rotate(-5deg);
+        box-shadow:0 0 20px rgba(0,255,255,0.3);
+    }
+
+    .screen{
+        position:absolute;
+        width:110px;
+        height:70px;
+        background:#021;
+        border:2px solid #0ff;
+        bottom:45px;
+        left:35px;
+        animation:screenGlow 2s infinite alternate;
+    }
+
+    @keyframes screenGlow{
+        0%{ box-shadow:0 0 5px #0ff;}
+        100%{ box-shadow:0 0 25px #0ff;}
+    }
+
+    /* Typing Effect */
+    .typing{
+        position:absolute;
+        top:10px;
+        left:10px;
+        color:#0f0;
+        font-size:10px;
+        letter-spacing:2px;
+        animation:typing 3s infinite;
+        white-space:nowrap;
+        overflow:hidden;
+        width:0;
+    }
+
+    @keyframes typing{
+        0%{width:0;}
+        50%{width:90px;}
+        100%{width:0;}
+    }
+
+    /* Suspense Text */
+    .title{
+        position:absolute;
+        top:8%;
+        color:white;
+        font-size:42px;
+        letter-spacing:8px;
+        text-transform:uppercase;
+        text-shadow:0 0 20px rgba(255,255,255,0.5);
+        animation:fadeText 4s infinite;
+    }
+
+    @keyframes fadeText{
+        0%{opacity:0.2;}
+        50%{opacity:1;}
+        100%{opacity:0.2;}
+    }
+
+    /* Floating Dust */
+    .dust{
+        position:absolute;
+        width:3px;
+        height:3px;
+        background:white;
+        border-radius:50%;
+        opacity:0.3;
+        animation:float 10s linear infinite;
+    }
+
+    @keyframes float{
+        from{
+            transform:translateY(100vh);
+        }
+        to{
+            transform:translateY(-100vh);
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="smoke"></div>
+<div class="light"></div>
+
+<h1 class="title">Unknown Presence</h1>
+
+<!-- Michael Jackson Shadow -->
+<div class="mj-shadow"></div>
+
+<!-- Anonymous Boy -->
+<div class="boy">
+    <div class="hood"></div>
+    <div class="face"></div>
+    <div class="body"></div>
+
+    <div class="screen">
+        <div class="typing">ACCESSING...</div>
+    </div>
+
+    <div class="laptop"></div>
+</div>
+
+<!-- Dust Particles -->
+<div class="dust" style="left:10%; animation-duration:8s;"></div>
+<div class="dust" style="left:25%; animation-duration:11s;"></div>
+<div class="dust" style="left:40%; animation-duration:9s;"></div>
+<div class="dust" style="left:55%; animation-duration:13s;"></div>
+<div class="dust" style="left:70%; animation-duration:7s;"></div>
+<div class="dust" style="left:85%; animation-duration:10s;"></div>
+
+<!-- Background Sound -->
+<audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5fa6d67d79.mp3" type="audio/mpeg">
+</audio>
+
+</body>
+</html>
+```

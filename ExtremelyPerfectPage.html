@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Extremely Perfect Mysterious Page</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: 'Courier New', monospace;
+    }
+
+    body{
+        overflow:hidden;
+        height:100vh;
+        background:black;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:relative;
+        color: white;
+        cursor: none;
+    }
+
+    /* Custom Cursor - Red eye */
+    .custom-cursor{
+        position:fixed;
+        width:24px;
+        height:24px;
+        background:radial-gradient(circle, rgba(255,0,0,0.3), transparent 70%);
+        border:1px solid rgba(255,0,0,0.5);
+        border-radius:50%;
+        pointer-events:none;
+        z-index:9999;
+        transform:translate(-50%, -50%);
+        transition:width 0.15s, height 0.15s;
+    }
+
+    .custom-cursor::before{
+        content:'●';
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        color:red;
+        font-size:12px;
+    }
+
+    .cursor-trail{
+        position:fixed;
+        width:3px;
+        height:3px;
+        background:rgba(255,0,0,0.5);
+        border-radius:50%;
+        pointer-events:none;
+        z-index:9998;
+        animation:trailFade 0.8s forwards;
+    }
+
+    @keyframes trailFade{
+        0%{ opacity:0.6; transform:scale(1); }
+        100%{ opacity:0; transform:scale(0); }
+    }
+
+    /* Background Smoke */
+    .smoke{
+        position:absolute;
+        top:-50%;
+        left:-50%;
+        width:200%;
+        height:200%;
+        background:radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+        animation:smokeMove 12s linear infinite;
+        opacity:0.5;
+        z-index:0;
+    }
+
+    @keyframes smokeMove{
+        0%{ transform:translate(-10%, -10%) rotate(0deg);}
+        100%{ transform:translate(10%, 10%) rotate(360deg);}
+    }
+
+    /* Fading Light */
+    .light{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        width:500px;
+        height:500px;
+        background:radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+        border-radius:50%;
+        animation:flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker{
+        0%{opacity:0.2;}
+        25%{opacity:0.5;}
+        50%{opacity:0.1;}
+        75%{opacity:0.4;}
+        100%{opacity:0.2;}
+    }
+
+    /* Matrix Code Rain */
+    .matrix-canvas{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:-2;
+        opacity:0.35;
+        pointer-events:none;
+    }
+
+    /* ===== COMPROMISE OVERLAY ===== */
+
+    /* Terminal window - bottom of page, full width strip */
+    .terminal-window{
+        position:fixed;
+        bottom:0;
+        left:0;
+        width:100%;
+        max-height:25vh;
+        background:rgba(0,0,0,0.75);
+        border-top:1px solid rgba(0,255,0,0.15);
+        overflow:hidden;
+        z-index:6;
+        box-shadow:0 -5px 20px rgba(0,255,0,0.05);
+        pointer-events:none;
+        backdrop-filter:blur(2px);
+    }
+
+    .terminal-header{
+        background:linear-gradient(180deg, #1a1a1a, #0a0a0a);
+        padding:3px 15px;
+        display:flex;
+        align-items:center;
+        border-bottom:1px solid rgba(0,255,0,0.1);
+        cursor:move;
+        user-select:none;
+    }
+
+    .terminal-dot{
+        width:6px;
+        height:6px;
+        border-radius:50%;
+        margin-right:4px;
+    }
+
+    .terminal-dot.red{ background:#ff4444; }
+    .terminal-dot.yellow{ background:#ffaa00; }
+    .terminal-dot.green{ background:#00ff44; }
+
+    .terminal-title{
+        color:rgba(0,255,0,0.35);
+        font-size:8px;
+        margin-left:8px;
+        letter-spacing:1px;
+        text-transform:uppercase;
+    }
+
+    .terminal-body{
+        padding:5px 15px;
+        font-size:9px;
+        line-height:1.4;
+        color:#0f0;
+        overflow-y:auto;
+        max-height:calc(25vh - 22px);
+        font-family:'Courier New', monospace;
+        opacity:0.5;
+    }
+
+    .terminal-line{
+        opacity:0;
+        animation:terminalAppear 0.3s forwards;
+        margin:2px 0;
+        word-break:break-all;
+    }
+
+    .terminal-line.error{ color:#ff4444; }
+    .terminal-line.warning{ color:#ffaa00; }
+    .terminal-line.success{ color:#00ff44; }
+    .terminal-line.info{ color:#0ff; }
+    .terminal-line.dim{ color:rgba(0,255,0,0.4); }
+
+    @keyframes blink{
+        0%, 100%{ opacity:1; }
+        50%{ opacity:0; }
+    }
+
+    @keyframes terminalAppear{
+        0%{ opacity:0; transform:translateY(-5px); }
+        100%{ opacity:1; transform:translateY(0); }
+    }
+
+    /* ===== WEBCAM INDICATOR ===== */
+    .webcam-indicator{
+        position:fixed;
+        top:10px;
+        right:10px;
+        width:8px;
+        height:8px;
+        background:#0f0;
+        border-radius:50%;
+        box-shadow:0 0 8px #0f0;
+        animation:webcamBlink 0.8s infinite;
+        z-index:7;
+    }
+
+    .webcam-indicator::after{
+        content:'WEBCAM';
+        position:absolute;
+        top:-1px;
+        right:14px;
+        color:#0f0;
+        font-size:8px;
+        letter-spacing:1px;
+        white-space:nowrap;
+        text-shadow:0 0 5px #0f0;
+    }
+
+    @keyframes webcamBlink{
+        0%, 100%{ opacity:1; box-shadow:0 0 10px #0f0, 0 0 30px rgba(0,255,0,0.4); }
+        50%{ opacity:0.3; box-shadow:0 0 5px #0f0; }
+    }
+
+    /* ===== MICROPHONE INDICATOR ===== */
+    .mic-indicator{
+        position:fixed;
+        top:10px;
+        right:80px;
+        width:8px;
+        height:8px;
+        background:#ff4444;
+        border-radius:50%;
+        box-shadow:0 0 8px #ff4444;
+        animation:micBlink 1.5s infinite;
+        z-index:7;
+    }
+
+    .mic-indicator::after{
+        content:'MIC';
+        position:absolute;
+        top:-1px;
+        right:14px;
+        color:#ff4444;
+        font-size:8px;
+        letter-spacing:1px;
+        white-space:nowrap;
+        text-shadow:0 0 5px #ff4444;
+    }
+
+    @keyframes micBlink{
+        0%, 100%{ opacity:1; }
+        50%{ opacity:0.2; }
+    }
+
+    /* ===== DATA STREAM ===== */
+    .data-stream{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:3px;
+        background:linear-gradient(90deg, transparent, #0f0, transparent);
+        animation:dataStream 2s linear infinite;
+        z-index:4;
+        opacity:0.35;
+    }
+
+    .data-stream-2{
+        position:fixed;
+        top:8px;
+        left:0;
+        width:100%;
+        height:1px;
+        background:linear-gradient(90deg, transparent, #0ff, transparent);
+        animation:dataStream 1.5s linear infinite reverse;
+        z-index:4;
+        opacity:0.25;
+    }
+
+    @keyframes dataStream{
+        0%{ transform:translateX(-100%); }
+        100%{ transform:translateX(100%); }
+    }
+
+    /* ===== FILE ACCESS NOTIFICATIONS ===== */
+    .file-notification{
+        position:fixed;
+        top:55px;
+        right:10px;
+        color:rgba(0,255,0,0.35);
+        font-size:8px;
+        letter-spacing:1px;
+        z-index:5;
+        text-align:right;
+        line-height:1.6;
+        pointer-events:none;
+    }
+
+    .file-line{
+        opacity:0;
+        animation:fileFade 4s forwards;
+    }
+
+    @keyframes fileFade{
+        0%{ opacity:0; transform:translateX(20px); }
+        10%{ opacity:1; transform:translateX(0); }
+        80%{ opacity:1; }
+        100%{ opacity:0; }
+    }
+
+    /* ===== KEYLOGGER DISPLAY ===== */
+    .keylog-display{
+        position:fixed;
+        bottom:26vh;
+        right:10px;
+        color:rgba(255,255,255,0.08);
+        font-size:9px;
+        font-family:'Courier New', monospace;
+        z-index:4;
+        text-align:right;
+        max-width:220px;
+        word-wrap:break-word;
+        pointer-events:none;
+        letter-spacing:1px;
+    }
+
+    /* ===== HIDDEN FILES BEING ACCESSED ===== */
+    .hidden-access{
+        position:fixed;
+        top:30px;
+        right:10px;
+        color:rgba(0,255,0,0.15);
+        font-size:9px;
+        text-align:right;
+        line-height:1.8;
+        z-index:3;
+        pointer-events:none;
+    }
+
+    .access-line{
+        opacity:0;
+        animation:accessGlow 3s forwards;
+    }
+
+    @keyframes accessGlow{
+        0%{ opacity:0; }
+        20%{ opacity:0.6; color:#0f0; }
+        50%{ opacity:0.2; }
+        100%{ opacity:0; }
+    }
+
+    /* ===== UPLOAD BAR ===== */
+    .upload-container{
+        position:fixed;
+        bottom:20%;
+        left:2%;
+        width:140px;
+        z-index:4;
+        pointer-events:none;
+        opacity:0;
+        animation:uploadShow 1s forwards;
+        animation-delay:8s;
+    }
+
+    @keyframes uploadShow{
+        0%{ opacity:0; }
+        100%{ opacity:0.5; }
+    }
+
+    .upload-label{
+        color:rgba(0,255,0,0.4);
+        font-size:8px;
+        letter-spacing:1px;
+        margin-bottom:3px;
+        text-transform:uppercase;
+    }
+
+    .upload-bar{
+        width:100%;
+        height:4px;
+        background:rgba(0,255,0,0.08);
+        border:1px solid rgba(0,255,0,0.15);
+        border-radius:2px;
+        overflow:hidden;
+    }
+
+    .upload-fill{
+        height:100%;
+        background:linear-gradient(90deg, #0f0, #0ff);
+        width:0%;
+        animation:uploadProgress 15s linear forwards;
+        animation-delay:8s;
+        box-shadow:0 0 5px rgba(0,255,0,0.2);
+    }
+
+    @keyframes uploadProgress{
+        0%{ width:0%; }
+        100%{ width:100%; }
+    }
+
+    .upload-percent{
+        color:rgba(0,255,0,0.3);
+        font-size:8px;
+        margin-top:3px;
+        letter-spacing:1px;
+    }
+
+    /* ===== LOCATION INFO ===== */
+    .location-info{
+        position:fixed;
+        top:30px;
+        left:10px;
+        color:rgba(0,255,0,0.15);
+        font-size:8px;
+        line-height:1.8;
+        z-index:3;
+        letter-spacing:1px;
+        pointer-events:none;
+        opacity:0;
+        animation:fadeInInfo 2s forwards;
+        animation-delay:10s;
+    }
+
+    @keyframes fadeInInfo{
+        0%{ opacity:0; }
+        100%{ opacity:0.3; }
+    }
+
+    /* ===== ORIGINAL ELEMENTS ===== */
+
+    /* Anonymous Boy */
+    .boy{
+        position:absolute;
+        right:8%;
+        bottom:80px;
+        width:180px;
+        height:220px;
+        z-index:2;
+    }
+
+    .hood{
+        position:absolute;
+        width:120px;
+        height:140px;
+        background:#111;
+        border-radius:60px 60px 40px 40px;
+        left:30px;
+        top:0;
+        box-shadow:0 0 15px rgba(0,0,0,0.8);
+    }
+
+    .face{
+        position:absolute;
+        width:70px;
+        height:70px;
+        background:#000;
+        border-radius:50%;
+        left:55px;
+        top:40px;
+        box-shadow:0 0 15px rgba(255,255,255,0.15), inset 0 0 10px rgba(255,255,255,0.05);
+    }
+
+    /* Glowing Eyes */
+    .eye-left, .eye-right{
+        position:absolute;
+        width:6px;
+        height:6px;
+        background:#0f0;
+        border-radius:50%;
+        box-shadow:0 0 8px #0f0, 0 0 15px #0f0;
+        animation:eyeGlow 2s infinite alternate;
+    }
+
+    .eye-left{
+        top:60px;
+        left:75px;
+    }
+
+    .eye-right{
+        top:60px;
+        left:100px;
+    }
+
+    @keyframes eyeGlow{
+        0%{ opacity:0.3; box-shadow:0 0 5px #0f0; }
+        100%{ opacity:1; box-shadow:0 0 15px #0f0, 0 0 30px #0f0; }
+    }
+
+    .body{
+        position:absolute;
+        width:160px;
+        height:120px;
+        background:linear-gradient(180deg, #0b0b0b 0%, #1a1a1a 100%);
+        border-radius:20px;
+        bottom:0;
+        left:10px;
+        box-shadow:0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Laptop */
+    .laptop{
+        position:absolute;
+        width:120px;
+        height:12px;
+        background:linear-gradient(180deg, #333, #111);
+        bottom:30px;
+        left:30px;
+        border-radius:2px;
+        box-shadow:0 0 15px rgba(0,255,255,0.3);
+    }
+
+    .screen{
+        position:absolute;
+        width:100px;
+        height:65px;
+        background:linear-gradient(135deg, #001a0a, #003300);
+        border:2px solid #0ff;
+        bottom:42px;
+        left:40px;
+        border-radius:3px;
+        animation:screenGlow 2s infinite alternate;
+        overflow:hidden;
+    }
+
+    .screen::after{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:linear-gradient(180deg, transparent 50%, rgba(0,255,0,0.05) 50%);
+        background-size:100% 4px;
+        pointer-events:none;
+        animation:scanLine 2s linear infinite;
+    }
+
+    @keyframes scanLine{
+        0%{ background-position:0 0; }
+        100%{ background-position:0 100%; }
+    }
+
+    @keyframes screenGlow{
+        0%{ box-shadow:0 0 5px #0ff; }
+        100%{ box-shadow:0 0 25px #0ff, 0 0 40px rgba(0,255,255,0.2); }
+    }
+
+    /* Typing Effect */
+    .typing{
+        position:absolute;
+        top:8px;
+        left:8px;
+        color:#0f0;
+        font-size:9px;
+        letter-spacing:2px;
+        animation:typing 3s infinite;
+        white-space:nowrap;
+        overflow:hidden;
+        width:0;
+        text-shadow:0 0 5px #0f0;
+    }
+
+    @keyframes typing{
+        0%{width:0;}
+        50%{width:85px;}
+        100%{width:0;}
+    }
+
+    /* Suspense Text - Original */
+    .title{
+        position:absolute;
+        top:4%;
+        left:50%;
+        transform:translateX(-50%);
+        color:white;
+        font-size:36px;
+        letter-spacing:12px;
+        text-transform:uppercase;
+        text-shadow:0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2);
+        animation:fadeText 4s infinite;
+        font-family:'Creepster', cursive;
+        font-weight:400;
+        z-index:2;
+        pointer-events:none;
+    }
+
+    @keyframes fadeText{
+        0%{opacity:0.2; text-shadow:0 0 10px rgba(255,255,255,0.3);}
+        50%{opacity:1; text-shadow:0 0 30px rgba(255,255,255,0.7), 0 0 60px rgba(255,255,255,0.3);}
+        100%{opacity:0.2; text-shadow:0 0 10px rgba(255,255,255,0.3);}
+    }
+
+    /* Wolf Image - positioned on the left side, perfect */
+    .wolf{
+        position:absolute;
+        left:5%;
+        bottom:120px;
+        width:180px;
+        height:auto;
+        opacity:0.6;
+        filter:blur(1px) grayscale(50%);
+        animation:fadeIn 10s infinite alternate;
+        z-index:2;
+        pointer-events:none;
+    }
+
+    @keyframes fadeIn{
+        0%{opacity:0.2; filter:blur(2px) grayscale(80%);}
+        100%{opacity:0.6; filter:blur(1px) grayscale(50%);}
+    }
+
+    /* King Image */
+    .king{
+        position:absolute;
+        top:10%;
+        left:50%;
+        transform:translateX(-50%);
+        width:260px;
+        height:260px;
+        object-fit:cover;
+        border-radius:50%;
+        opacity:0.35;
+        filter:blur(2px) grayscale(70%) sepia(30%);
+        z-index:-1;
+        animation:kingPulse 8s infinite;
+        pointer-events:none;
+    }
+
+    @keyframes kingPulse{
+        0%{opacity:0.3; filter:blur(2px) grayscale(70%) sepia(30%);}
+        50%{opacity:0.7; filter:blur(1px) grayscale(40%) sepia(10%);}
+        100%{opacity:0.3; filter:blur(2px) grayscale(70%) sepia(30%);}
+    }
+
+    /* Initial Text - Original */
+    .initial-text{
+        position:absolute;
+        top:18%;
+        left:50%;
+        transform:translateX(-50%);
+        text-align:center;
+        font-size:18px;
+        opacity:1;
+        visibility:visible;
+        animation:fadeOut 5s forwards;
+        line-height:1.8;
+        color:rgba(255,255,255,0.8);
+        text-shadow:0 0 10px rgba(255,255,255,0.2);
+        z-index:2;
+        pointer-events:none;
+    }
+
+    .initial-text p{
+        margin:12px 0;
+    }
+
+    @keyframes fadeOut{
+        0%{opacity:1; visibility:visible;}
+        99%{opacity:0; visibility:visible;}
+        100%{opacity:0; visibility:hidden;}
+    }
+
+    /* Subtitle - appears after initial text fades */
+    .subtitle{
+        position:absolute;
+        top:26%;
+        left:50%;
+        transform:translateX(-50%);
+        text-align:center;
+        font-size:16px;
+        color:#ff2222;
+        opacity:0;
+        animation:subtitleAppear 2s forwards;
+        animation-delay:5s;
+        z-index:2;
+        pointer-events:none;
+        text-shadow:0 0 20px rgba(255,0,0,0.6), 0 0 40px rgba(255,0,0,0.3);
+    }
+
+    .subtitle p{
+        margin:8px 0;
+        letter-spacing:5px;
+        text-transform:uppercase;
+        font-size:13px;
+        font-weight:bold;
+    }
+
+    @keyframes subtitleAppear{
+        0%{ opacity:0; transform:translateX(-50%) scale(0.8); }
+        100%{ opacity:1; transform:translateX(-50%) scale(1); }
+    }
+
+    /* Shock Element - Original */
+    .shock{
+        position:fixed;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        color:#8b0000;
+        font-size:48px;
+        opacity:0;
+        animation:shockAnim 0.15s ease-in-out 3;
+        animation-delay:5s;
+        animation-fill-mode:forwards;
+        font-family:'Creepster', cursive;
+        letter-spacing:8px;
+        text-shadow:0 0 20px rgba(139,0,0,0.6), 0 0 40px rgba(139,0,0,0.3);
+        pointer-events:none;
+        z-index:5;
+    }
+
+    @keyframes shockAnim{
+        0%{ opacity:0; transform:translate(-50%, -50%) scale(2.5); }
+        25%{ opacity:1; transform:translate(-50%, -50%) scale(1); }
+        75%{ opacity:1; transform:translate(-50%, -50%) scale(1); }
+        100%{ opacity:0; transform:translate(-50%, -50%) scale(0.5); }
+    }
+
+    /* Floating Dust */
+    .dust{
+        position:absolute;
+        width:3px;
+        height:3px;
+        background:white;
+        border-radius:50%;
+        opacity:0.3;
+        animation:float 10s linear infinite;
+        z-index:1;
+    }
+
+    @keyframes float{
+        from{
+            transform:translateY(100vh);
+        }
+        to{
+            transform:translateY(-100vh);
+        }
+    }
+
+    /* Blood Drips */
+    .blood-drip{
+        position:absolute;
+        top:0;
+        width:3px;
+        height:25px;
+        background:linear-gradient(180deg, #8b0000, #ff0000);
+        opacity:0.7;
+        animation:drip 4s linear infinite;
+        z-index:1;
+        border-radius:0 0 3px 3px;
+        box-shadow:0 0 5px rgba(255,0,0,0.3);
+    }
+
+    @keyframes drip{
+        0%{ top:-25px; opacity:0.8; }
+        10%{ opacity:1; }
+        100%{ top:100vh; opacity:0; }
+    }
+
+    /* Hypnotic Spiral */
+    .hypnotic-spiral{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        width:200px;
+        height:200px;
+        border:2px solid rgba(255,0,0,0.2);
+        border-radius:50%;
+        animation:spiralPulse 5s ease-in-out infinite;
+        z-index:-1;
+        opacity:0.2;
+    }
+
+    .hypnotic-spiral-inner{
+        position:absolute;
+        top:10px;
+        left:10px;
+        width:180px;
+        height:180px;
+        border:2px solid rgba(255,255,255,0.15);
+        border-radius:50%;
+        animation:spin-reverse 8s linear infinite;
+    }
+
+    .hypnotic-spiral::before{
+        content:'';
+        position:absolute;
+        top:10px;
+        left:10px;
+        width:180px;
+        height:180px;
+        border:2px solid rgba(255,255,255,0.1);
+        border-radius:50%;
+        animation:spin-reverse 8s linear infinite;
+    }
+
+    @keyframes spin-reverse{
+        from{ transform:rotate(0deg); }
+        to{ transform:rotate(-360deg); }
+    }
+
+    @keyframes spiralPulse{
+        0%,100%{ transform:translate(-50%, -50%) scale(1); opacity:0.15; }
+        50%{ transform:translate(-50%, -50%) scale(1.3); opacity:0.4; }
+    }
+
+    /* Horror Flash */
+    .horror-flash{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:red;
+        opacity:0;
+        z-index:10;
+        pointer-events:none;
+    }
+
+    /* Glitch Text Effect */
+    .glitch-text{
+        position:fixed;
+        bottom:5%;
+        left:50%;
+        transform:translateX(-50%);
+        color:rgba(255,0,0,0.15);
+        font-size:10px;
+        letter-spacing:3px;
+        text-transform:uppercase;
+        animation:glitch 2s infinite;
+        pointer-events:none;
+        opacity:0;
+        animation-delay:6s;
+        animation-fill-mode:forwards;
+        z-index:2;
+    }
+
+    @keyframes glitch{
+        0%, 90%, 92%, 100%{ opacity:0.12; }
+        91%{ opacity:0.4; }
+        93%{ opacity:0; }
+    }
+
+    /* ===== EFFECTS ===== */
+
+    /* Screen Shake */
+    .screen-shake{
+        animation:shake 0.15s ease-in-out;
+    }
+
+    @keyframes shake{
+        0%, 100%{ transform:translate(0, 0); }
+        10%{ transform:translate(-4px, 2px); }
+        30%{ transform:translate(4px, -2px); }
+        50%{ transform:translate(-2px, 4px); }
+        70%{ transform:translate(2px, -4px); }
+        90%{ transform:translate(-4px, 2px); }
+    }
+
+    /* Glitch Lines */
+    .glitch-line{
+        position:fixed;
+        left:0;
+        width:100%;
+        height:2px;
+        background:rgba(0,255,0,0.5);
+        z-index:8;
+        pointer-events:none;
+        animation:glitchLine 0.2s ease-out;
+    }
+
+    @keyframes glitchLine{
+        0%{ opacity:1; }
+        100%{ opacity:0; height:0; }
+    }
+
+    /* Corner vignette */
+    .vignette{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.8) 100%);
+        pointer-events:none;
+        z-index:3;
+    }
+</style>
+</head>
+<body>
+
+<!-- Original Elements -->
+<canvas class="matrix-canvas"></canvas>
+<div class="smoke"></div>
+<div class="light"></div>
+<div class="hypnotic-spiral">
+    <div class="hypnotic-spiral-inner"></div>
+</div>
+<div class="horror-flash"></div>
+<div class="vignette"></div>
+
+<!-- Custom Cursor -->
+<div class="custom-cursor" id="cursor"></div>
+
+<!-- Compromised Indicators -->
+<div class="webcam-indicator"></div>
+<div class="mic-indicator"></div>
+<div class="data-stream"></div>
+<div class="data-stream-2"></div>
+<div class="hidden-access" id="hiddenAccess"></div>
+<div class="keylog-display" id="keylogDisplay"></div>
+<div class="file-notification" id="fileNotification"></div>
+<div class="location-info">
+    IP: 192.168.x.x<br>
+    LOC: UNKNOWN<br>
+    DEVICE: COMPROMISED<br>
+    STATUS: UPLOADING
+</div>
+
+<!-- Upload Progress -->
+<div class="upload-container">
+    <div class="upload-label">Exfiltrating Personal Data</div>
+    <div class="upload-bar">
+        <div class="upload-fill"></div>
+    </div>
+    <div class="upload-percent" id="uploadPercent">0%</div>
+</div>
+
+<!-- Terminal -->
+<div class="terminal-window" id="terminal">
+    <div class="terminal-header">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span class="terminal-title">C:\Windows\System32\compromised.exe</span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+        <div class="terminal-line success">C:\> Initializing remote access...</div>
+    </div>
+</div>
+
+<!-- Original Title -->
+<h1 class="title">The Wolf is at your Door</h1>
+
+<!-- Mysterious Wolf - centered upward -->
+<img class="wolf" src="Wolf.avif" alt="Mysterious Wolf">
+
+<!-- The King Image -->
+<img class="king" src="king.jpg" alt="The King">
+
+<!-- Original Initial Text -->
+<div class="initial-text">
+    <p>In the darkness, unseen eyes watch your every move...</p>
+    <p>The void whispers your name. Can you feel the cold breath on your neck?</p>
+</div>
+
+<!-- Subtitle appears after fade -->
+<div class="subtitle">
+    <p>Your system has been compromised</p>
+    <p>All data is being collected remotely</p>
+</div>
+
+<!-- Original Shock Text -->
+<div class="shock">RUN WHILE YOU CAN</div>
+
+<div class="glitch-text">system compromised</div>
+
+<!-- Anonymous Boy -->
+<div class="boy">
+    <div class="hood"></div>
+    <div class="face"></div>
+    <div class="eye-left"></div>
+    <div class="eye-right"></div>
+    <div class="body"></div>
+
+    <div class="screen">
+        <div class="typing">ACCESSING...</div>
+    </div>
+
+    <div class="laptop"></div>
+</div>
+
+<!-- Dust Particles -->
+<div class="dust" style="left:10%; animation-duration:8s;"></div>
+<div class="dust" style="left:25%; animation-duration:11s;"></div>
+<div class="dust" style="left:40%; animation-duration:9s;"></div>
+<div class="dust" style="left:55%; animation-duration:13s;"></div>
+<div class="dust" style="left:70%; animation-duration:7s;"></div>
+<div class="dust" style="left:85%; animation-duration:10s;"></div>
+
+<!-- Blood Drips -->
+<div class="blood-drip" style="left:15%; animation-delay:0s;"></div>
+<div class="blood-drip" style="left:35%; animation-delay:1s;"></div>
+<div class="blood-drip" style="left:55%; animation-delay:2s;"></div>
+<div class="blood-drip" style="left:75%; animation-delay:3s;"></div>
+<div class="blood-drip" style="left:90%; animation-delay:4s;"></div>
+
+<!-- Background Sound -->
+<audio id="bgmusic" autoplay loop muted>
+    <source src="bot kak.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const music = document.getElementById('bgmusic');
+window.addEventListener('click', () => {
+    music.muted = false;
+    music.play();
+}, { once: true });
+</script>
+
+<!-- Matrix Rain -->
+<script>
+    const canvas = document.querySelector('.matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    const letters = '01abcXYZ$%^&*<>?!@#';
+    const fontSize = 16;
+    let columns = 0;
+    let drops = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        columns = Math.floor(canvas.width / fontSize);
+        drops = Array(columns).fill(0);
+    }
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0f0';
+        ctx.font = `${fontSize}px monospace`;
+
+        drops.forEach((y, index) => {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            const x = index * fontSize;
+            ctx.fillText(text, x, y * fontSize);
+            if (y * fontSize > canvas.height && Math.random() > 0.98) {
+                drops[index] = 0;
+            } else {
+                drops[index] = y + 0.5;
+            }
+        });
+
+        requestAnimationFrame(drawMatrix);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    drawMatrix();
+</script>
+
+<!-- Terminal Lines -->
+<script>
+    const terminalBody = document.getElementById('terminalBody');
+
+    const terminalLines = [
+        { text: 'C:\\> Initializing remote access...', type: 'success', delay: 500 },
+        { text: 'C:\\> Establishing encrypted tunnel...', type: 'info', delay: 1200 },
+        { text: 'C:\\> Tunnel established [192.168.1.105:443]', type: 'success', delay: 2200 },
+        { text: '', type: 'dim', delay: 2800 },
+        { text: 'C:\\> WARNING: UNAUTHORIZED ACCESS DETECTED', type: 'error', delay: 3200 },
+        { text: 'C:\\> Firewall disabled by remote process', type: 'warning', delay: 4000 },
+        { text: '', type: 'dim', delay: 4300 },
+        { text: 'C:\\> Enumerating system drives...', type: 'info', delay: 4700 },
+        { text: 'C:\\> System files located', type: 'dim', delay: 5500 },
+        { text: 'C:\\> Personal documents found', type: 'dim', delay: 6000 },
+        { text: 'C:\\> Browser data detected', type: 'dim', delay: 6500 },
+        { text: 'C:\\> Extracting credentials...', type: 'dim', delay: 7000 },
+        { text: '', type: 'dim', delay: 7400 },
+        { text: 'C:\\> Accessing browser credentials...', type: 'warning', delay: 7800 },
+        { text: 'C:\\> Chrome saved passwords extracted', type: 'info', delay: 8600 },
+        { text: 'C:\\> Firefox saved passwords extracted', type: 'info', delay: 9200 },
+        { text: 'C:\\> Edge saved passwords extracted', type: 'info', delay: 9800 },
+        { text: '', type: 'dim', delay: 10100 },
+        { text: 'C:\\> Capturing active browser sessions...', type: 'error', delay: 10500 },
+        { text: 'C:\\> Session cookies extracted ✔', type: 'success', delay: 11300 },
+        { text: 'C:\\> Banking session detected', type: 'warning', delay: 11800 },
+        { text: 'C:\\> Social media session detected', type: 'warning', delay: 12300 },
+        { text: 'C:\\> Email session detected', type: 'warning', delay: 12800 },
+        { text: '', type: 'dim', delay: 13100 },
+        { text: 'C:\\> Activating webcam...', type: 'error', delay: 13500 },
+        { text: 'C:\\> Webcam feed captured', type: 'success', delay: 14200 },
+        { text: 'C:\\> Activating microphone...', type: 'error', delay: 14700 },
+        { text: 'C:\\> Audio capture started', type: 'success', delay: 15300 },
+        { text: '', type: 'dim', delay: 15600 },
+        { text: 'C:\\> Beginning data exfiltration...', type: 'error', delay: 16000 },
+        { text: 'C:\\> Uploading: personal_documents.zip', type: 'info', delay: 16800 },
+        { text: 'C:\\> Uploading: browser_data.enc', type: 'info', delay: 17500 },
+        { text: 'C:\\> Uploading: system_info.dat', type: 'info', delay: 18200 },
+        { text: 'C:\\> Uploading: keystroke_log.bin', type: 'info', delay: 18900 },
+        { text: '', type: 'dim', delay: 19300 },
+        { text: 'C:\\> !!! BACKDOOR INSTALLED !!!', type: 'error', delay: 19800 },
+        { text: 'C:\\> Persistence mechanism active', type: 'error', delay: 20400 },
+        { text: 'C:\\> System will remain compromised', type: 'error', delay: 21000 },
+        { text: '', type: 'dim', delay: 21400 },
+        { text: 'C:\\> Connection stable. Awaiting commands..._', type: 'success', delay: 22000 },
+    ];
+
+    let lineIndex = 0;
+
+    function addTerminalLine() {
+        if (lineIndex >= terminalLines.length) return;
+        const line = terminalLines[lineIndex];
+        const div = document.createElement('div');
+        div.className = `terminal-line ${line.type}`;
+        div.style.animationDelay = '0s';
+        div.innerHTML = line.text;
+        terminalBody.appendChild(div);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        lineIndex++;
+        setTimeout(addTerminalLine, line.delay);
+    }
+
+    setTimeout(addTerminalLine, 1000);
+</script>
+
+<!-- Hidden Files Access -->
+<script>
+    const hiddenAccess = document.getElementById('hiddenAccess');
+    const filePaths = [
+        'C:/Users/[REDACTED]/Documents/',
+        'C:/Users/[REDACTED]/Pictures/',
+        'C:/Users/[REDACTED]/.ssh/',
+        'C:/Users/[REDACTED]/AppData/Local/Chrome/',
+        'C:/Users/[REDACTED]/Desktop/',
+        'C:/Windows/System32/config/',
+        'C:/Users/[REDACTED]/Downloads/',
+        'C:/Users/[REDACTED]/Documents/passwords.docx',
+        'C:/Users/[REDACTED]/AppData/Roaming/Telegram/',
+        'C:/Users/[REDACTED]/.gitconfig',
+    ];
+
+    function addAccessLine() {
+        const line = document.createElement('div');
+        line.className = 'access-line';
+        line.textContent = '> ACCESSING: ' + filePaths[Math.floor(Math.random() * filePaths.length)];
+        hiddenAccess.appendChild(line);
+        while (hiddenAccess.children.length > 8) {
+            hiddenAccess.removeChild(hiddenAccess.firstChild);
+        }
+        setTimeout(addAccessLine, 2000 + Math.random() * 5000);
+    }
+    setTimeout(addAccessLine, 3000);
+</script>
+
+<!-- File Notifications -->
+<script>
+    const fileNotif = document.getElementById('fileNotification');
+    const notifFiles = [
+        'extracting browser history...',
+        'collecting saved passwords...',
+        'scanning local drives...',
+        'capturing screenshots...',
+        'recording microphone input...',
+        'indexing file system...',
+        'copying personal documents...',
+        'exporting contact list...',
+        'reading chat history...',
+        'monitoring active processes...',
+        'keylogger active',
+        'webcam feed: recording',
+        'network traffic: intercepting',
+        'clipboard: monitoring',
+    ];
+
+    function addNotifLine() {
+        const line = document.createElement('div');
+        line.className = 'file-line';
+        line.textContent = '> ' + notifFiles[Math.floor(Math.random() * notifFiles.length)];
+        fileNotif.appendChild(line);
+        while (fileNotif.children.length > 5) {
+            fileNotif.removeChild(fileNotif.firstChild);
+        }
+        setTimeout(addNotifLine, 3000 + Math.random() * 4000);
+    }
+    setTimeout(addNotifLine, 4000);
+</script>
+
+<!-- Keylogger -->
+<script>
+    const keylogDisplay = document.getElementById('keylogDisplay');
+    let keylogText = '';
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key.length === 1) {
+            keylogText += e.key;
+            if (keylogText.length > 60) {
+                keylogText = keylogText.slice(-60);
+            }
+            keylogDisplay.textContent = '> KEYLOG: ' + keylogText;
+        } else if (e.key === 'Backspace') {
+            keylogText += '[BS]';
+            keylogDisplay.textContent = '> KEYLOG: ' + keylogText;
+        }
+    });
+</script>
+
+<!-- Upload Progress -->
+<script>
+    const uploadPercent = document.getElementById('uploadPercent');
+    let progress = 0;
+    setInterval(() => {
+        progress += 0.5 + Math.random() * 1.5;
+        if (progress > 100) progress = 99.9;
+        uploadPercent.textContent = Math.floor(progress) + '%';
+    }, 500);
+</script>
+
+<!-- Horror Flash & Glitch -->
+<script>
+    const flash = document.querySelector('.horror-flash');
+    const body = document.body;
+
+    function randomFlash() {
+        const delay = Math.random() * 12000 + 4000;
+        setTimeout(() => {
+            flash.style.opacity = '0.2';
+            body.classList.add('screen-shake');
+            const glitch = document.createElement('div');
+            glitch.className = 'glitch-line';
+            glitch.style.top = Math.random() * 100 + '%';
+            document.body.appendChild(glitch);
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                body.classList.remove('screen-shake');
+                glitch.remove();
+            }, 200);
+            randomFlash();
+        }, delay);
+    }
+    randomFlash();
+</script>
+
+<!-- Custom Cursor -->
+<script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        trail.style.left = e.clientX + 'px';
+        trail.style.top = e.clientY + 'px';
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 800);
+    });
+</script>
+
+<!-- Console Messages -->
+<script>
+    console.log('%c🚨 SYSTEM COMPROMISED', 'color: red; font-size: 24px; font-weight: bold;');
+    console.log('%cYour machine has been remotely accessed.', 'color: #ff4444; font-size: 14px;');
+    console.log('%cAll network traffic is being monitored.', 'color: #8b0000; font-size: 14px;');
+    console.log('%cDo not attempt to disconnect.', 'color: #660000; font-size: 14px;');
+    
+    setInterval(() => {
+        const msgs = [
+            'PACKET CAPTURE: data exfiltrated',
+            'WEBCAM: snapshot captured',
+            'KEYLOGGER: keys recorded',
+            'MICROPHONE: audio buffer transmitting',
+            'CLIPBOARD: contents captured',
+            'SCREENSHOT: taken and uploaded',
+            'NETWORK: scanning local subnet...',
+        ];
+        console.log('%c[EXFIL] ' + msgs[Math.floor(Math.random() * msgs.length)], 'color: #0f0; font-size: 11px;');
+    }, 8000);
+</script>
+
+</body>
+</html>
